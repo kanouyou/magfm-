@@ -37,6 +37,9 @@ class Proprocess :: INodeContainer
       fNodeId = id;
     }
 
+    /*! get node id number */
+    int GetNodeId() const { return fNodeId; }
+
     /*! set node flags */
     void SetFlags(const int flag) {
       fFlag = flag;
@@ -106,9 +109,48 @@ class Proprocess :: IMakeNode
     /*! set mesh number */
     void SetMesh(const int nx, const int ny);
 
+    /*! get mesh number */
+    int* GetMesh() { return fMsh; }
+
+    /*! set length of space \Omega */
+    void SetSpaceSize(const double lx, const double ly);
+
+    /*! set position of space */
+    void SetSpacePosition(const double x=0., const double y=0.);
+
+    /*! get space size */
+    double* GetSpaceSize() { return fLength; }
+
+    /*! get space position */
+    double* GetSpacePosition() { return fPoint; }
+
+    /*! get the node id number */
+    int node(const int i, const int j) const { return j + fMsh[0]*i; }
+
+    /*! fill node information into container */
+    void Fill();
+
+    /*! get node container */
+    Proprocess::INodeContainer* GetNodeEntry(int i, int j) { return fNode[node(i,j)]; }
+
+    /*! get this node container */
+    Proprocess::INodeContainer* GetNodeEntry(int i) { return fNode[i]; }
+
+    /*! get node container vector */
+    std::vector<Proprocess::INodeContainer*> GetNode() { return fNode; }
+
+    /*! get total node entries */
+    int GetNodeEntries() const { return fNode.size(); }
+
 
   private:
+    /*! mesh number */
     int* fMsh;
+    /*! space length */
+    double* fLength;
+    /*! space center position */
+    double* fPoint;
+    /*! node container */
     std::vector<Proprocess::INodeContainer*> fNode;
 };
 
