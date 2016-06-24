@@ -2,11 +2,12 @@
 # Author: 03.24.2016
 # Y. Yang
 
-TARGET  = SimCOMETCaptureQuench.exe
+TARGET  = thermalfdm.exe
 CXX     = g++
-MAINSRC = main.cpp
+MAINSRC = demo.cpp
 VPATH   = src
-LIBSRC  = 
+LIBSRC  = IMakeNode.cpp \
+		  IMakeMaterial.cpp
 
 SRC     = $(MAINSRC) $(LIBSRC)
 OBJS    = $(SRC:.cpp=.o)

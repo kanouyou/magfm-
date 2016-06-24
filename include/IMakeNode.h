@@ -1,7 +1,9 @@
 #ifndef IMakeNode_HH
 #define IMakeNode_HH
 
-namespace Proprocess
+#include <vector>
+
+namespace Preprocess2d
 { 
   class INodeContainer;    
   class IMakeNode; 
@@ -9,7 +11,7 @@ namespace Proprocess
 
 
 /*! contain the node number and position information */
-class Proprocess :: INodeContainer
+class Preprocess2d :: INodeContainer
 {
   public:
     /*! constructor */
@@ -74,6 +76,9 @@ class Proprocess :: INodeContainer
     /*! get flags */
     int GetFlags() const { return fFlag; }
 
+    /*! show the information of this node */
+    void Show();
+
 
   private:
     /*! node flag */
@@ -94,7 +99,7 @@ class Proprocess :: INodeContainer
 /*!
  *  cut the mesh of zone /Omega
  */
-class Proprocess :: IMakeNode
+class Preprocess2d :: IMakeNode
 {
 
   public:
@@ -104,7 +109,7 @@ class Proprocess :: IMakeNode
     IMakeNode(const int nx, const int ny);
 
     /*! deconstructor */
-    ~IMakeNode();
+    virtual ~IMakeNode();
 
     /*! set mesh number */
     void SetMesh(const int nx, const int ny);
@@ -131,16 +136,30 @@ class Proprocess :: IMakeNode
     void Fill();
 
     /*! get node container */
-    Proprocess::INodeContainer* GetNodeEntry(int i, int j) { return fNode[node(i,j)]; }
+    Preprocess2d::INodeContainer* GetNodeEntry(int i, int j) { return fNode.at(node(i,j)); }
 
     /*! get this node container */
-    Proprocess::INodeContainer* GetNodeEntry(int i) { return fNode[i]; }
+    Preprocess2d::INodeContainer* GetNodeEntry(int i) { return fNode.at(i); }
 
     /*! get node container vector */
-    std::vector<Proprocess::INodeContainer*> GetNode() { return fNode; }
+    std::vector<Preprocess2d::INodeContainer*> GetNode() { return fNode; }
 
     /*! get total node entries */
     int GetNodeEntries() const { return fNode.size(); }
+
+    /*! get node id for circular geometry */
+    std::vector<int> MakeCircle(const double x0, const double y0, const double r);
+
+    /*! get node id if the node is inside the rectange */
+    std::vector<int> MakeRectangle(const double x0, const double y0, 
+                                   const double lx, const double ly);
+
+
+    /*! get nodes on the boundary */
+    std::vector<int> GetVertexNode();
+
+    /*! get boundary node */
+    std::vector<int> GetBoundaryNode(const std::string& opt="all");
 
 
   private:
@@ -151,7 +170,7 @@ class Proprocess :: IMakeNode
     /*! space center position */
     double* fPoint;
     /*! node container */
-    std::vector<Proprocess::INodeContainer*> fNode;
+    std::vector<Preprocess2d::INodeContainer*> fNode;
 };
 
 #endif
